@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tile Stack</string>
+    <string name="question_mode_a">Stack Count</string>
+    <string name="question_mode_b">Area Count</string>
+    <string name="submit">Submit</string>
+    <string name="see_explanation">See Explanation</string>
+    <string name="see_side_view">See 3D Stack View</string>
+    <string name="next_level">Next Level</string>
+    <string name="replay">Replay</string>
+    <string name="correct">Correct!</string>
+    <string name="incorrect">Not quite</string>
+</resources>
