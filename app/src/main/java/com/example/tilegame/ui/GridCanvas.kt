@@ -105,14 +105,18 @@ fun GridCanvas(
         val cellW = size.width / GRID_COLS
         val cellH = size.height / GRID_ROWS
 
-        // ── 1. Tile fills ──────────────────────────────────────────────────
+        // ── 1. Grid lines (drawn first so tile fills cover them inside tiles) ─
+        drawGridLines(cellW, cellH)
+
+        // ── 2. Tile fills (cover grid lines within tile area so each cell
+        //       appears completely filled) ────────────────────────────────────
         tiles.take(revealedTileCount).forEachIndexed { i, tile ->
             val yOff = offsets.getOrElse(i) { DROP_DISTANCE_PX }
             val alpha = if (tile.id in dimmedTileIds) DIMMED_ALPHA else 1f
             drawTileFill(tile, cellW, cellH, yOff, alpha)
         }
 
-        // ── 2. Highlighted cells (gold tint) ──────────────────────────────
+        // ── 3. Highlighted cells (gold tint) ──────────────────────────────
         highlightedCells.forEach { (col, row) ->
             drawRect(
                 color = HighlightGold.copy(alpha = 0.55f),
@@ -121,7 +125,7 @@ fun GridCanvas(
             )
         }
 
-        // ── 3. Queried cell outline (Mode A) ──────────────────────────────
+        // ── 4. Queried cell outline (Mode A) ──────────────────────────────
         highlightedCell?.let { (col, row) ->
             // Bright outline so child can identify the cell easily
             drawRect(
@@ -137,15 +141,12 @@ fun GridCanvas(
             )
         }
 
-        // ── 4. Tile borders (drawn on top of fills so they're always sharp) ─
+        // ── 5. Tile borders ───────────────────────────────────────────────
         tiles.take(revealedTileCount).forEachIndexed { i, tile ->
             val yOff = offsets.getOrElse(i) { DROP_DISTANCE_PX }
             val alpha = if (tile.id in dimmedTileIds) DIMMED_ALPHA else 1f
             drawTileBorder(tile, cellW, cellH, yOff, alpha)
         }
-
-        // ── 5. Grid lines (on top so they're always visible) ──────────────
-        drawGridLines(cellW, cellH)
     }
 }
 
@@ -177,12 +178,15 @@ private fun DrawScope.drawTileBorder(
     yOff: Float,
     alpha: Float
 ) {
-    // Outer dark stroke
+    val strokeW = 3.5f
+    val half = strokeW / 2f
+    // Outer dark stroke – inset by half stroke width so it stays entirely
+    // within the tile's own cells and never bleeds into adjacent empty cells.
     drawRect(
         color = Color.Black.copy(alpha = alpha * 0.75f),
-        topLeft = Offset(tile.x * cellW, tile.y * cellH + yOff),
-        size = Size(tile.width * cellW, tile.height * cellH),
-        style = Stroke(width = 3.5f)
+        topLeft = Offset(tile.x * cellW + half, tile.y * cellH + yOff + half),
+        size = Size(tile.width * cellW - strokeW, tile.height * cellH - strokeW),
+        style = Stroke(width = strokeW)
     )
     // Inner white highlight for depth
     drawRect(
