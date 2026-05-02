@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Two overlapping tile rectangles representing the game -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M20,30 L60,30 L60,60 L20,60 Z" />
+    <path
+        android:fillColor="#FFE66D"
+        android:pathData="M40,45 L80,45 L80,78 L40,78 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1"
+        android:pathData="M40,45 L60,45 L60,60 L40,60 Z"
+        android:fillAlpha="0.5"/>
+</vector>
